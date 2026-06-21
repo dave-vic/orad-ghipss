@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: orad
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: orad_db
+    ports: ['5432:5432']
+    volumes: ['pgdata:/var/lib/postgresql/data']
+
+  redis:
+    image: redis:7-alpine
+    ports: ['6379:6379']
+
+  server:
+    build: ./server
+    ports: ['4000:4000']
+    depends_on: [db, redis]
+    env_file: ./server/.env
+    volumes: ['./server:/app', '/app/node_modules']
+
+  client:
+    build: ./client
+    ports: ['5173:5173']
+    depends_on: [server]
+    volumes: ['./client:/app', '/app/node_modules']
+
+volumes:
+  pgdata:

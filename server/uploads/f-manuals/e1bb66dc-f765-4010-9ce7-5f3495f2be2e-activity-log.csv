@@ -1,0 +1,41 @@
+id,timestamp,user,action,targetType,targetName,ipAddress
+37ad3580-9f7e-418e-92ba-6c0be4412d03,2026-06-19T19:49:05.597Z,admin,user_create,user,Kofi Asante,::1
+e7c056c4-fbb9-4f2f-a04f-14551b2aebe0,2026-06-19T19:49:05.316Z,admin,login,,,::1
+aaff8a71-7c0b-475d-99c4-11d4a332d03c,2026-06-19T19:44:16.156Z,admin,upload,document,ORAD-SPEC.md,::1
+aefc6a57-f79e-4d67-9198-3da7f2aac538,2026-06-19T19:44:11.191Z,admin,upload,document,2e993be4-a247-4c6c-b5b9-c02430a53f05-MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+f5bc62b3-4798-498c-b412-859ef16686a8,2026-06-19T19:41:39.426Z,admin,password_reset,user,Sarah Mensah,::1
+cd40d17d-2196-4a45-b182-9118921456e2,2026-06-19T19:41:39.121Z,admin,folder_edit,folder,Standard Operating Procedures,::1
+aede11ac-6867-4eb5-8e98-4c7901ffcc55,2026-06-19T19:41:39.092Z,admin,login,,,::1
+2d536cc7-b4c3-4ee3-bd02-9aaa4df17766,2026-06-19T19:36:10.337Z,admin,download,document,invoice_fashion_ecommerce.pdf,::1
+f901ef3c-c766-4a8c-9c1d-b0f01a4e946c,2026-06-19T19:36:08.249Z,admin,upload,document,invoice_fashion_ecommerce.pdf,::1
+cd0fccf5-17e4-4827-adea-12e645dff8fa,2026-06-19T19:34:14.686Z,admin,download,document,MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+aa89db35-4e20-4715-844e-602b4efae667,2026-06-19T19:33:24.850Z,admin,download,document,MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+0d5dad0a-3057-45a6-b5b5-249cbed7ffd4,2026-06-19T19:33:19.266Z,admin,download,document,MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+b90b6b27-784c-4932-a9fc-373e4d02171e,2026-06-19T16:33:17.861Z,admin,download,document,MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+332747fb-3b0c-4acb-8f2c-3f4c29caac1e,2026-06-19T16:33:13.947Z,admin,download,document,MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+09d51380-4ab2-4e77-8c69-7dd92d36b806,2026-06-19T16:33:11.259Z,admin,upload,document,MojoPay_Meeting_Notes_Audio1_9_1.docx,::1
+2a554849-fa6f-41c8-b04b-f2d1a31ea5eb,2026-06-19T16:33:03.464Z,admin,login,,,::1
+96853fce-887c-48cd-bd40-9407abbc6faa,2026-06-19T16:33:00.942Z,sarah,logout,,,::1
+80bf5de4-0622-4a33-af49-54b08de53b16,2026-06-19T16:31:13.507Z,sarah,download,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+ec04369c-a29c-4b9c-8ac2-bf262d904b0c,2026-06-19T16:31:11.746Z,sarah,download,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+a0d17787-6f30-4e23-8c59-f9578606ea66,2026-06-19T16:31:09.870Z,sarah,download,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+d9dd7be9-becf-40b9-b41e-349e0b7a67f3,2026-06-19T16:31:09.415Z,sarah,download,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+ad820c3c-a375-40ea-82c1-cc34ac3c86d7,2026-06-19T16:31:08.463Z,sarah,download,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+956e23b8-bf38-42e0-9acb-bd2517799187,2026-06-19T16:30:58.002Z,sarah,login,,,::1
+37c0ed84-e8e3-4ee8-8ba6-5be3b1be0ebd,2026-06-19T16:30:46.290Z,admin,logout,,,::1
+8cca6036-1ad6-4393-9e89-81ef31cac70d,2026-06-19T16:30:26.866Z,admin,user_create,user,Sarah Mensah,::1
+632d74ad-d89a-4588-b5f7-7c8c87d23eb9,2026-06-19T16:30:26.587Z,admin,login,,,::1
+6b3ef10c-e6b9-4fc4-a5cd-d8dc609995df,2026-06-19T16:29:55.498Z,admin,login,,,::1
+e7a2a85f-fea1-4073-a8b4-3b1ea6bdff3b,2026-06-19T16:28:23.689Z,admin,logout,,,::1
+3e294b31-796c-4b25-b582-6a22b0835d55,2026-06-19T16:28:21.295Z,admin,upload,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+fd47f5ba-ca98-4214-b245-ce27425ce247,2026-06-19T16:28:20.632Z,admin,upload,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+320a928c-899c-442e-803c-ab2fc2ef4595,2026-06-19T16:27:18.049Z,admin,upload,document,ORAD-Platform-Overview.docx,::1
+2b09c8d4-9586-4e99-b3a7-885ff5cd1241,2026-06-19T16:27:17.823Z,admin,upload,document,ORAD-Platform-Overview.docx,::1
+921f6864-5e00-464d-8efb-fb3522fb4c1c,2026-06-19T16:27:17.468Z,admin,upload,document,ORAD-Platform-Overview.docx,::1
+9bbcc4d6-f653-46a1-95ac-0d775df3e17e,2026-06-19T16:27:16.866Z,admin,upload,document,ORAD-Platform-Overview.docx,::1
+dff77cc7-c988-4222-9ee6-d0423cce31c8,2026-06-19T16:27:05.077Z,admin,upload,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+fb80faed-03ca-49ea-8e9d-2dade7aeb86a,2026-06-19T16:27:04.493Z,admin,upload,document,MojoPay_Meeting_Notes_Audio1_9.docx,::1
+38e449f6-86c6-4ae2-af90-591251a82603,2026-06-19T16:23:53.491Z,admin,user_create,user,davida dzato ,::1
+0499ff18-8374-4048-ba2f-b25b48eb282d,2026-06-19T16:23:16.249Z,admin,login,,,::1
+2d5df462-94ac-473a-b5a8-0b5f6ccc2dfc,2026-06-19T16:12:24.806Z,admin,login,,,::1
+96aaa45e-a65b-45fd-b8b0-b92509eb9920,2026-06-19T16:10:55.705Z,admin,login,,,::1

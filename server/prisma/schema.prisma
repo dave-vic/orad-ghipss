@@ -1,0 +1,271 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  member
+  viewer
+}
+
+enum Action {
+  login
+  login_fail
+  logout
+  view
+  download
+  upload
+  delete
+  user_create
+  role_change
+  deactivate
+  password_reset
+  folder_create
+  folder_edit
+  folder_delete
+  bulk_delete
+  acknowledge
+  access_request
+  access_approve
+  access_deny
+  guest_link_create
+  guest_link_view
+  two_factor_enabled
+  two_factor_disabled
+  folder_access_grant
+  folder_access_revoke
+  comment_add
+  comment_delete
+  password_change
+  session_revoke
+  version_upload
+  favourite_add
+  favourite_remove
+  document_expire
+}
+
+enum RequestStatus {
+  pending
+  approved
+  denied
+}
+
+model User {
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  username          String    @unique
+  password          String
+  role              Role      @default(viewer)
+  active            Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  lastLogin         DateTime?
+  twoFactorSecret   String?
+  twoFactorEnabled  Boolean   @default(false)
+
+  documents         Document[]
+  logs              ActivityLog[]
+  acknowledgements  DocumentAcknowledgement[]
+  accessRequests    AccessRequest[]   @relation("UserRequests")
+  reviewedRequests  AccessRequest[]   @relation("ReviewedRequests")
+  guestLinks        GuestLink[]
+  folderAccess      UserFolderAccess[] @relation("UserAccess")
+  grantedAccess     UserFolderAccess[] @relation("GrantedAccess")
+  comments          DocumentComment[]
+  notifications     Notification[]
+  sessions          UserSession[]
+  favourites        UserFavourite[]
+  documentVersions  DocumentVersion[]
+
+  @@map("users")
+}
+
+model Folder {
+  id           String    @id @default(uuid())
+  name         String
+  description  String?
+  icon         String    @default("📁")
+  allowedRoles Role[]
+  announcement String?
+  createdAt    DateTime  @default(now())
+
+  documents    Document[]
+  accessRequests AccessRequest[]
+  userAccess   UserFolderAccess[]
+
+  @@map("folders")
+}
+
+model Document {
+  id               String    @id @default(uuid())
+  folderId         String
+  folder           Folder    @relation(fields: [folderId], references: [id])
+  name             String
+  storageKey       String
+  sizeBytes        BigInt
+  mimeType         String
+  uploadedBy       String
+  uploader         User      @relation(fields: [uploadedBy], references: [id])
+  uploadedAt       DateTime  @default(now())
+  deletedAt        DateTime?
+  requiresAck      Boolean   @default(false)
+  tags             String[]
+  expiresAt        DateTime?
+
+  acknowledgements DocumentAcknowledgement[]
+  guestLinks       GuestLink[]
+  comments         DocumentComment[]
+  versions         DocumentVersion[]
+
+  @@map("documents")
+}
+
+model DocumentAcknowledgement {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  documentId     String
+  document       Document @relation(fields: [documentId], references: [id])
+  acknowledgedAt DateTime @default(now())
+
+  @@unique([userId, documentId])
+  @@map("document_acknowledgements")
+}
+
+model AccessRequest {
+  id          String        @id @default(uuid())
+  userId      String
+  user        User          @relation("UserRequests", fields: [userId], references: [id])
+  folderId    String
+  folder      Folder        @relation(fields: [folderId], references: [id])
+  reason      String
+  status      RequestStatus @default(pending)
+  reviewedBy  String?
+  reviewer    User?         @relation("ReviewedRequests", fields: [reviewedBy], references: [id])
+  reviewNote  String?
+  createdAt   DateTime      @default(now())
+  reviewedAt  DateTime?
+
+  @@unique([userId, folderId])
+  @@map("access_requests")
+}
+
+model GuestLink {
+  id          String    @id @default(uuid())
+  token       String    @unique @default(uuid())
+  documentId  String
+  document    Document  @relation(fields: [documentId], references: [id])
+  createdBy   String
+  creator     User      @relation(fields: [createdBy], references: [id])
+  label       String?
+  expiresAt   DateTime?
+  maxViews    Int?
+  viewCount   Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  @@map("guest_links")
+}
+
+model UserFolderAccess {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation("UserAccess", fields: [userId], references: [id])
+  folderId    String
+  folder      Folder    @relation(fields: [folderId], references: [id])
+  expiresAt   DateTime?
+  grantedBy   String
+  granter     User      @relation("GrantedAccess", fields: [grantedBy], references: [id])
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, folderId])
+  @@map("user_folder_access")
+}
+
+model ActivityLog {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  action      Action
+  targetType  String?
+  targetId    String?
+  targetName  String?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@map("activity_logs")
+}
+
+model DocumentComment {
+  id         String   @id @default(uuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id])
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  body       String
+  createdAt  DateTime @default(now())
+  editedAt   DateTime?
+
+  @@map("document_comments")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String
+  title     String
+  body      String?
+  linkUrl   String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notifications")
+}
+
+model DocumentVersion {
+  id         String   @id @default(uuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id])
+  version    Int
+  storageKey String
+  sizeBytes  BigInt
+  uploadedBy String
+  uploader   User     @relation(fields: [uploadedBy], references: [id])
+  uploadedAt DateTime @default(now())
+  note       String?
+
+  @@map("document_versions")
+}
+
+model UserSession {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  jti       String    @unique
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  @@map("user_sessions")
+}
+
+model UserFavourite {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  type       String
+  targetId   String
+  targetName String
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, type, targetId])
+  @@map("user_favourites")
+}

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ORAD Platform Documentation — GhIPSS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    color: #374151;
+    background: #F7F8FA;
+    line-height: 1.7;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 0;
+  }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(135deg, #112235 0%, #1e3a5f 60%, #306196 100%);
+    padding: 80px 64px 64px;
+    color: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .cover-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 72px;
+  }
+  .cover-logo-mark {
+    width: 40px; height: 40px;
+    background: #306196;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; color: #FFFFFF;
+  }
+  .cover-logo-text { font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.9); }
+  .cover-logo-sub  { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+  .cover-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    letter-spacing: -1.5px;
+  }
+  .cover-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 48px;
+    font-weight: 400;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 24px;
+  }
+  .cover-meta-item label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+  .cover-meta-item span { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); }
+
+  /* TOC */
+  .toc {
+    padding: 48px 64px;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  .toc h2 {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc > ol > li { counter-increment: toc; margin-bottom: 10px; }
+  .toc > ol > li > a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    text-decoration: none;
+    color: #112235;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .toc > ol > li > a::before {
+    content: counter(toc, decimal) ".";
+    color: #306196;
+    font-weight: 800;
+    min-width: 20px;
+  }
+  .toc-dot {
+    flex: 1;
+    border-bottom: 1px dotted #D1D5DB;
+    margin: 0 4px;
+    height: 1px;
+    position: relative;
+    top: -3px;
+  }
+  .toc-page { font-size: 12px; color: #9CA3AF; }
+
+  /* Body content */
+  .content { padding: 0 64px 64px; }
+
+  .section {
+    padding-top: 56px;
+    border-top: 2px solid #E5E7EB;
+    margin-top: 56px;
+  }
+  .section:first-child { border-top: none; margin-top: 0; padding-top: 56px; }
+
+  .section-number {
+    font-size: 11px;
+    font-weight: 800;
+    color: #306196;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #112235;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .section-desc {
+    font-size: 13px;
+    color: #6B7280;
+    margin-bottom: 28px;
+  }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #112235;
+    margin: 28px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 16px;
+    background: #306196;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    margin: 20px 0 8px;
+  }
+  p { margin-bottom: 12px; color: #374151; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 20px;
+    font-size: 13px;
+  }
+  thead tr { background: #F7F8FA; }
+  th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 2px solid #E5E7EB;
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #F3F4F6;
+    color: #374151;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  td strong { color: #112235; font-weight: 700; }
+
+  /* Feature cards */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0 20px;
+  }
+  .feature-card {
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 16px;
+    background: #FFFFFF;
+  }
+  .feature-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #112235;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .feature-card-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #306196;
+    flex-shrink: 0;
+  }
+  .feature-card p { font-size: 12px; color: #6B7280; margin: 0; }
+
+  /* Role badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge-admin  { background: #FEE2E2; color: #DC2626; }
+  .badge-member { background: #D1FAE5; color: #059669; }
+  .badge-viewer { background: #FEF3C7; color: #D97706; }
+  .badge-blue   { background: #DBEAFE; color: #2563EB; }
+
+  /* Code */
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    background: #F3F4F6;
+    border: 1px solid #E5E7EB;
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: #306196;
+  }
+  pre {
+    background: #112235;
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 12px 0 20px;
+  }
+  pre code {
+    background: none;
+    border: none;
+    color: #E2E8F0;
+    font-size: 12px;
+    padding: 0;
+  }
+
+  /* Info strip */
+  .info-strip {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-left: 4px solid #306196;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #1E40AF;
+    margin: 14px 0 20px;
+  }
+  .warning-strip {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-left: 4px solid #D97706;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #92400E;
+    margin: 14px 0 20px;
+  }
+
+  /* Folder tree */
+  .tree {
+    background: #F7F8FA;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    color: #374151;
+    line-height: 1.8;
+  }
+  .tree .dir  { color: #306196; font-weight: 700; }
+  .tree .note { color: #9CA3AF; }
+
+  /* Footer */
+  .footer {
+    background: #F7F8FA;
+    border-top: 1px solid #E5E7EB;
+    padding: 24px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #9CA3AF;
+  }
+  .footer strong { color: #306196; }
+
+  @media print {
+    body { background: white; }
+    .page { max-width: 100%; }
+    .section { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-logo">
+      <div class="cover-logo-mark">G</div>
+      <div>
+        <div class="cover-logo-text">GhIPSS</div>
+        <div class="cover-logo-sub">Ghana Interbank Payment and Settlement Systems</div>
+      </div>
+    </div>
+    <div class="cover-badge">Technical Documentation</div>
+    <h1>ORAD</h1>
+    <div class="cover-sub">Operations Restricted Access Directory — Platform Build Overview</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Status</label>
+        <span>In Development</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Version</label>
+        <span>1.0</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Prepared</label>
+        <span>June 2026</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Prepared by</label>
+        <span>Silverrock Tech</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#s1">Overview <span class="toc-dot"></span></a></li>
+      <li><a href="#s2">Tech Stack <span class="toc-dot"></span></a></li>
+      <li><a href="#s3">User Roles &amp; Access <span class="toc-dot"></span></a></li>
+      <li><a href="#s4">Pages &amp; Features <span class="toc-dot"></span></a></li>
+      <li><a href="#s5">Database Models <span class="toc-dot"></span></a></li>
+      <li><a href="#s6">API Routes <span class="toc-dot"></span></a></li>
+      <li><a href="#s7">Security <span class="toc-dot"></span></a></li>
+      <li><a href="#s8">Running the Platform <span class="toc-dot"></span></a></li>
+      <li><a href="#s9">Project Structure <span class="toc-dot"></span></a></li>
+    </ol>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. Overview -->
+    <div class="section" id="s1">
+      <div class="section-number">Section 01</div>
+      <h2>Overview</h2>
+      <div class="section-desc">What ORAD is and why it was built</div>
+
+      <p>ORAD (Operations Restricted Access Directory) is a secure, internal document management platform built for GhIPSS. It provides a single, controlled location for storing, accessing, and auditing sensitive operational documents — with access governed by role and folder-level permissions.</p>
+
+      <p>The platform replaces ad-hoc file sharing (shared drives, email attachments) with a structured system that tracks who accessed what and when, enforces access restrictions, and gives administrators visibility and control over the entire document lifecycle.</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-card-title"><span class="dot"></span>Secure Document Storage</div>
+          <p>Documents are stored server-side with controlled access. No public URLs — every download is authenticated.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title"><span class="dot"></span>Role-Based Access Control</div>
+          <p>Three roles (Admin, Member, Viewer) with configurable permissions per folder and document type.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title"><span class="dot"></span>Full Audit Trail</div>
+          <p>Every login, download, upload, deletion, and role change is logged with user, timestamp, and IP address.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card-title"><span class="dot"></span>Access Request Flow</div>
+          <p>Users can request access to restricted folders. Admins review, approve or deny with optional notes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Tech Stack -->
+    <div class="section" id="s2">
+      <div class="section-number">Section 02</div>
+      <h2>Tech Stack</h2>
+      <div class="section-desc">Technologies used to build the platform</div>
+
+      <h3>Frontend</h3>
+      <table>
+        <thead><tr><th>Technology</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><strong>React 18</strong></td><td>UI component framework</td></tr>
+          <tr><td><strong>Vite</strong></td><td>Development server and production build tool</td></tr>
+          <tr><td><strong>React Router v6</strong></td><td>Client-side page routing and navigation</td></tr>
+          <tr><td><strong>Axios</strong></td><td>HTTP requests to the backend API</td></tr>
+          <tr><td><strong>Lucide React</strong></td><td>Icon library used throughout the UI</td></tr>
+          <tr><td><strong>React DOM createPortal</strong></td><td>Renders modals to document.body to prevent clipping</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Backend</h3>
+      <table>
+        <thead><tr><th>Technology</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Node.js</strong></td><td>JavaScript runtime environment</td></tr>
+          <tr><td><strong>Express 5</strong></td><td>HTTP server, API routing, middleware pipeline</td></tr>
+          <tr><td><strong>Prisma ORM</strong></td><td>Type-safe database queries, schema management, migrations</td></tr>
+          <tr><td><strong>PostgreSQL</strong></td><td>Primary relational database</td></tr>
+          <tr><td><strong>bcrypt</strong></td><td>Password hashing with salt rounds</td></tr>
+          <tr><td><strong>jsonwebtoken</strong></td><td>JWT generation and verification for sessions</td></tr>
+          <tr><td><strong>cookie-parser</strong></td><td>Reading HTTP-only cookies on the server</td></tr>
+          <tr><td><strong>cors</strong></td><td>Restricts API access to the frontend origin only</td></tr>
+          <tr><td><strong>multer</strong></td><td>Handles multipart/form-data for file uploads</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Design System</h3>
+      <p>The UI uses a fully custom design system — no CSS framework (no Tailwind, no Bootstrap). All styling is written as inline React styles.</p>
+      <table>
+        <thead><tr><th>Token</th><th>Value</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td>Brand blue</td><td><code>#306196</code></td><td>Primary buttons, links, active states, checkboxes, toggles</td></tr>
+          <tr><td>Near-black</td><td><code>#112235</code></td><td>Headings, strong text, sidebar</td></tr>
+          <tr><td>Page background</td><td><code>#F7F8FA</code></td><td>App background</td></tr>
+          <tr><td>Surface</td><td><code>#FFFFFF</code></td><td>Cards, tables, modals</td></tr>
+          <tr><td>Border</td><td><code>#E5E7EB</code></td><td>All borders and dividers</td></tr>
+          <tr><td>Body text</td><td><code>#374151</code></td><td>General text</td></tr>
+          <tr><td>Muted text</td><td><code>#6B7280</code></td><td>Secondary labels, subtitles</td></tr>
+          <tr><td>Font</td><td>Plus Jakarta Sans</td><td>All text throughout the platform</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. User Roles -->
+    <div class="section" id="s3">
+      <div class="section-number">Section 03</div>
+      <h2>User Roles &amp; Access</h2>
+      <div class="section-desc">How permissions are structured across the platform</div>
+
+      <table>
+        <thead><tr><th>Role</th><th>Description</th><th>Badge</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Admin</strong></td>
+            <td>Full platform access. Manages users, folders, and documents. Reviews access requests. Sees all activity logs and audit data.</td>
+            <td><span class="badge badge-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td><strong>Member</strong></td>
+            <td>Standard operational access. Can view, download, and upload documents in permitted folders. Cannot manage users or see other users' activity.</td>
+            <td><span class="badge badge-member">Member</span></td>
+          </tr>
+          <tr>
+            <td><strong>Viewer</strong></td>
+            <td>Read-only access. Can view and download documents in folders they have been granted access to. Cannot upload or manage anything.</td>
+            <td><span class="badge badge-viewer">Viewer</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Demo Credentials</h3>
+      <table>
+        <thead><tr><th>Username</th><th>Password</th><th>Role</th><th>Name</th></tr></thead>
+        <tbody>
+          <tr><td><code>admin</code></td><td><code>Ghipps2024!</code></td><td><span class="badge badge-admin">Admin</span></td><td>System Admin</td></tr>
+          <tr><td><code>sarah</code></td><td><code>Member2024!</code></td><td><span class="badge badge-member">Member</span></td><td>Sarah Mensah</td></tr>
+          <tr><td><code>kofi</code></td><td><code>Viewer2024!</code></td><td><span class="badge badge-viewer">Viewer</span></td><td>Kofi Asante</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Permission Matrix</h3>
+      <table>
+        <thead><tr><th>Permission</th><th>Admin</th><th>Member</th><th>Viewer</th></tr></thead>
+        <tbody>
+          <tr><td>View documents</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Download documents</td><td>✓</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Upload documents</td><td>✓</td><td>✓</td><td>—</td></tr>
+          <tr><td>Delete documents</td><td>✓</td><td>—</td><td>—</td></tr>
+          <tr><td>Manage folders</td><td>✓</td><td>—</td><td>—</td></tr>
+          <tr><td>Manage users</td><td>✓</td><td>—</td><td>—</td></tr>
+          <tr><td>View all activity logs</td><td>✓</td><td>—</td><td>—</td></tr>
+          <tr><td>Review access requests</td><td>✓</td><td>—</td><td>—</td></tr>
+          <tr><td>Request folder access</td><td>—</td><td>✓</td><td>✓</td></tr>
+          <tr><td>View own activity</td><td>✓</td><td>✓</td><td>✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 4. Pages & Features -->
+    <div class="section" id="s4">
+      <div class="section-number">Section 04</div>
+      <h2>Pages &amp; Features</h2>
+      <div class="section-desc">A walkthrough of every screen in the platform</div>
+
+      <h3>Login</h3>
+      <p>The entry point to the platform. Users authenticate with a username and password. A JWT token is issued and stored in an HTTP-only cookie. Demo credential cards are displayed for quick testing access. On success, the user is redirected to the Dashboard.</p>
+
+      <h3>Dashboard</h3>
+      <p>The home screen after login. Content adapts based on the user's role.</p>
+      <h4>Admin view includes:</h4>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li>Insight alert banners (pending access requests, stale documents) — dismissible, and also reflected in the notification bell</li>
+        <li>Favourited folders and documents as quick-access pills</li>
+        <li>Stat cards: Total Documents, Active Users, Downloads (30 days), Uploads (30 days), Pending Requests</li>
+        <li>Most Downloaded documents in the last 30 days</li>
+        <li>Recent Activity feed showing all user actions</li>
+        <li>Documents not accessed in 90+ days with a direct link</li>
+      </ul>
+      <h4>Member / Viewer view includes:</h4>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li>Downloads stat card (personal)</li>
+        <li>Personal recent activity feed</li>
+        <li>Favourites</li>
+      </ul>
+
+      <h3>Directory</h3>
+      <p>Browse all folders in the platform. Folders the user can access are shown as full cards with a custom icon. Restricted folders (no access) are shown in a locked state — clicking them opens an access request form. Accessible folders navigate into the Folder Page on click.</p>
+
+      <h3>Folder Page</h3>
+      <p>The core document management screen. Displays all documents within a folder in a structured table.</p>
+      <table>
+        <thead><tr><th>Column</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td>Document name</td><td>File icon, name, tag badges</td></tr>
+          <tr><td>Type</td><td>File extension (PDF, DOCX, etc.)</td></tr>
+          <tr><td>Size</td><td>Human-readable file size</td></tr>
+          <tr><td>Uploaded</td><td>Upload date</td></tr>
+          <tr><td>Uploaded by</td><td>User avatar and name</td></tr>
+          <tr><td>Actions</td><td>View, Download, Comment icons. Admin gets additional kebab menu.</td></tr>
+        </tbody>
+      </table>
+      <h4>Additional features on this page:</h4>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li>Document viewer (PDF and image preview in a full modal)</li>
+        <li>Comments panel per document</li>
+        <li>Version history — upload a new version, view previous versions</li>
+        <li>Guest link sharing — create a time-limited, view-count-limited public link</li>
+        <li>Folder announcement banner — admin can post a notice shown to all users</li>
+        <li>Require Acknowledgement — mark a document as requiring user sign-off</li>
+        <li>Admin: Edit folder, Delete folder from the ··· menu</li>
+      </ul>
+
+      <h3>My Activity</h3>
+      <p>Personal history for the logged-in user, split into two tables:</p>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li><strong>Recently Accessed</strong> — documents the user has viewed or downloaded, with action badge and date</li>
+        <li><strong>My Acknowledgements</strong> — documents the user has formally acknowledged, with folder and date. Rows navigate to the relevant folder.</li>
+      </ul>
+
+      <h3>My Requests</h3>
+      <p>For Members and Viewers to track their folder access requests. Shows request status (Pending / Approved / Denied) and any reviewer note left by the admin.</p>
+
+      <h3>Activity Log</h3>
+      <p>Admin-only. A complete, filterable audit trail of every action taken on the platform — login, logout, download, upload, delete, role change, folder access grant/revoke, comments, guest links, and more. Exportable to CSV.</p>
+
+      <h3>User Management</h3>
+      <p>Admin-only. Two-tab interface:</p>
+      <h4>Users tab</h4>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li>Table of all users: avatar, name, email, role badge, active status toggle, joined date, last login</li>
+        <li>Search, sort, filter</li>
+        <li>Bulk select + bulk actions (deactivate, delete)</li>
+        <li>Per-user kebab menu: View Profile, Reset Password, Change Role, Deactivate/Activate, Delete</li>
+        <li>View Profile modal with full user details</li>
+        <li>Add User modal to create new accounts</li>
+        <li>Bulk Import via CSV file upload</li>
+        <li>Pagination (10 / 20 / 50 rows)</li>
+      </ul>
+      <h4>Roles & Permissions tab</h4>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li>Visual matrix of all permissions across all roles</li>
+        <li>Collapsible categories: Documents, Folders, Activity & Logs, User Management, Settings</li>
+        <li>Inline toggle checkboxes (Member and Viewer editable; Admin locked)</li>
+      </ul>
+
+      <h3>Access Requests</h3>
+      <p>Admin-only. Review folder access requests submitted by Members and Viewers.</p>
+      <ul style="margin: 0 0 12px 20px; color: #374151;">
+        <li>Tabbed by status: Pending / Approved / Denied</li>
+        <li>Table showing: User, Folder, Reason, Submitted date, Status</li>
+        <li>Review modal: shows requester details and reason, Approve / Deny toggle, optional note to the user</li>
+        <li>Approving a request immediately grants the user access to that folder</li>
+      </ul>
+
+      <h3>Account Settings</h3>
+      <p>Accessible from the top-right user dropdown. Allows the logged-in user to update their display name, email, change their password, set up two-factor authentication, and view/revoke their active sessions.</p>
+
+      <h3>Notifications</h3>
+      <p>The bell icon in the top bar shows unread notification count. Clicking it opens a dropdown panel with all notifications. Admin notifications include daily insight alerts (pending requests, stale documents). Notifications are clickable and navigate to the relevant page.</p>
+    </div>
+
+    <!-- 5. Database -->
+    <div class="section" id="s5">
+      <div class="section-number">Section 05</div>
+      <h2>Database Models</h2>
+      <div class="section-desc">PostgreSQL schema managed via Prisma ORM</div>
+
+      <table>
+        <thead><tr><th>Model</th><th>Description</th><th>Key fields</th></tr></thead>
+        <tbody>
+          <tr><td><strong>User</strong></td><td>Platform users</td><td>name, email, username, password (hashed), role, active, lastLogin, twoFactorEnabled</td></tr>
+          <tr><td><strong>Folder</strong></td><td>Document folders</td><td>name, description, icon, allowedRoles[], announcement</td></tr>
+          <tr><td><strong>Document</strong></td><td>Uploaded files</td><td>name, storageKey, sizeBytes, mimeType, folderId, requiresAck, tags[], expiresAt</td></tr>
+          <tr><td><strong>DocumentVersion</strong></td><td>Version history per document</td><td>documentId, version number, storageKey, uploadedBy, note</td></tr>
+          <tr><td><strong>DocumentAcknowledgement</strong></td><td>User sign-offs on documents</td><td>userId, documentId, acknowledgedAt</td></tr>
+          <tr><td><strong>DocumentComment</strong></td><td>Comments on documents</td><td>documentId, userId, body, createdAt, editedAt</td></tr>
+          <tr><td><strong>AccessRequest</strong></td><td>Folder access requests</td><td>userId, folderId, reason, status, reviewedBy, reviewNote</td></tr>
+          <tr><td><strong>UserFolderAccess</strong></td><td>Individual folder grants (overrides role)</td><td>userId, folderId, grantedBy, expiresAt</td></tr>
+          <tr><td><strong>GuestLink</strong></td><td>Public sharing links for documents</td><td>token, documentId, expiresAt, maxViews, viewCount</td></tr>
+          <tr><td><strong>ActivityLog</strong></td><td>Full audit trail</td><td>userId, action (enum), targetType, targetId, targetName, ipAddress</td></tr>
+          <tr><td><strong>Notification</strong></td><td>In-app bell notifications</td><td>userId, type, title, body, linkUrl, read</td></tr>
+          <tr><td><strong>UserSession</strong></td><td>Active JWT sessions</td><td>userId, jti, ipAddress, expiresAt, revokedAt</td></tr>
+          <tr><td><strong>UserFavourite</strong></td><td>Bookmarked items per user</td><td>userId, type, targetId, targetName</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 6. API Routes -->
+    <div class="section" id="s6">
+      <div class="section-number">Section 06</div>
+      <h2>API Routes</h2>
+      <div class="section-desc">All backend endpoints exposed by the Express server</div>
+
+      <table>
+        <thead><tr><th>Route prefix</th><th>Description</th><th>Access</th></tr></thead>
+        <tbody>
+          <tr><td><code>/auth</code></td><td>Login, logout, session management</td><td>Public / All</td></tr>
+          <tr><td><code>/folders</code></td><td>Create, read, update, delete folders</td><td>Admin</td></tr>
+          <tr><td><code>/documents</code></td><td>Upload, download, view, delete documents</td><td>Role-based</td></tr>
+          <tr><td><code>/versions</code></td><td>Upload new version, list version history</td><td>Role-based</td></tr>
+          <tr><td><code>/comments</code></td><td>Add and delete document comments</td><td>Role-based</td></tr>
+          <tr><td><code>/access-requests</code></td><td>Submit requests, review and update status</td><td>Role-based</td></tr>
+          <tr><td><code>/user-access</code></td><td>Grant or revoke individual folder access</td><td>Admin</td></tr>
+          <tr><td><code>/users</code></td><td>List, create, edit, deactivate, delete users</td><td>Admin</td></tr>
+          <tr><td><code>/user-import</code></td><td>Bulk user creation from CSV</td><td>Admin</td></tr>
+          <tr><td><code>/notifications</code></td><td>Fetch and mark notifications read</td><td>All</td></tr>
+          <tr><td><code>/activity-log</code></td><td>Full audit log with filters and CSV export</td><td>Admin</td></tr>
+          <tr><td><code>/me</code></td><td>Personal activity and acknowledgements</td><td>All</td></tr>
+          <tr><td><code>/dashboard</code></td><td>Stats, insights, top documents, recent activity</td><td>All</td></tr>
+          <tr><td><code>/favourites</code></td><td>Add and remove bookmarked items</td><td>All</td></tr>
+          <tr><td><code>/search</code></td><td>Global search across documents and folders</td><td>All</td></tr>
+          <tr><td><code>/guest-links</code></td><td>Create and manage public sharing links</td><td>Role-based</td></tr>
+          <tr><td><code>/two-factor</code></td><td>Enable, disable, verify 2FA (TOTP)</td><td>All</td></tr>
+          <tr><td><code>/audit</code></td><td>CSV audit export endpoint</td><td>Admin</td></tr>
+          <tr><td><code>/presence</code></td><td>Active online users</td><td>Admin</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 7. Security -->
+    <div class="section" id="s7">
+      <div class="section-number">Section 07</div>
+      <h2>Security</h2>
+      <div class="section-desc">How the platform protects data and controls access</div>
+
+      <h3>Authentication</h3>
+      <p>Users authenticate with a username and password. On success, the server issues a signed <strong>JWT</strong> stored in an <strong>HTTP-only cookie</strong> — this means the token is never accessible to JavaScript and cannot be stolen via XSS. Every protected API route requires a valid token verified by the <code>authenticate</code> middleware.</p>
+
+      <h3>Passwords</h3>
+      <p>All passwords are hashed using <strong>bcrypt</strong> with 10 salt rounds before being stored. Plain-text passwords are never saved to the database.</p>
+
+      <h3>Role Enforcement</h3>
+      <p>Admin-only routes are protected by a <code>requireRole('admin')</code> middleware that checks the user's role from their JWT payload and returns a 403 if the check fails.</p>
+
+      <h3>CORS</h3>
+      <p>The API only accepts requests from the configured frontend origin (<code>CLIENT_URL</code> in the server <code>.env</code>). All other origins receive a CORS error.</p>
+
+      <h3>Session Management</h3>
+      <p>Sessions are tracked in the database (<code>UserSession</code> model) with a unique JWT ID (<code>jti</code>). Admins can view and revoke any active session. Revoked sessions are rejected even if the JWT has not yet expired.</p>
+
+      <h3>Guest Links</h3>
+      <p>Shared document links use a random UUID token. They can be set to expire by date and/or by view count. No authentication is required to access a guest link, but they are rate-limited and tracked.</p>
+
+      <h3>Audit Logging</h3>
+      <p>Every significant action is logged: logins (success and failure), logouts, downloads, uploads, deletions, role changes, folder access grants/revocations, comments, guest link creation, 2FA changes, and session revocations.</p>
+
+      <div class="warning-strip">
+        <strong>Note:</strong> File storage currently uses the local filesystem. For production, files should be migrated to an object storage service (e.g. AWS S3 or Google Cloud Storage) to ensure durability and scalability.
+      </div>
+    </div>
+
+    <!-- 8. Running -->
+    <div class="section" id="s8">
+      <div class="section-number">Section 08</div>
+      <h2>Running the Platform</h2>
+      <div class="section-desc">How to start both the frontend and backend locally</div>
+
+      <div class="info-strip">Both the backend server and frontend dev server must be running at the same time in separate terminals.</div>
+
+      <h3>Prerequisites</h3>
+      <ul style="margin: 0 0 16px 20px; color: #374151;">
+        <li>Node.js 18 or higher</li>
+        <li>PostgreSQL running locally</li>
+        <li><code>.env</code> file configured in <code>/server</code> with <code>DATABASE_URL</code> and <code>CLIENT_URL</code></li>
+      </ul>
+
+      <h3>Start the Backend</h3>
+      <pre><code>cd server
+node src/index.js</code></pre>
+      <p>Server runs on <strong>http://localhost:4000</strong></p>
+
+      <h3>Start the Frontend</h3>
+      <pre><code>cd client
+npm run dev</code></pre>
+      <p>Frontend runs on <strong>http://localhost:5174</strong></p>
+
+      <h3>First-Time Setup</h3>
+      <pre><code>cd server
+npx prisma migrate dev   # Creates all database tables
+node prisma/seed.js      # Creates demo users and folders</code></pre>
+
+      <h3>Environment Variables (server/.env)</h3>
+      <table>
+        <thead><tr><th>Variable</th><th>Example</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>DATABASE_URL</code></td><td><code>postgresql://user:pass@localhost:5432/orad</code></td><td>PostgreSQL connection string</td></tr>
+          <tr><td><code>JWT_SECRET</code></td><td><code>your-secret-key</code></td><td>Secret used to sign JWT tokens</td></tr>
+          <tr><td><code>CLIENT_URL</code></td><td><code>http://localhost:5174</code></td><td>Frontend origin for CORS</td></tr>
+          <tr><td><code>PORT</code></td><td><code>4000</code></td><td>Port the API server listens on</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 9. Structure -->
+    <div class="section" id="s9">
+      <div class="section-number">Section 09</div>
+      <h2>Project Structure</h2>
+      <div class="section-desc">How the codebase is organised</div>
+
+      <div class="tree">
+<span class="dir">orad ghipps/</span>
+├── <span class="dir">client/</span>                   <span class="note"># React frontend (Vite)</span>
+│   └── <span class="dir">src/</span>
+│       ├── <span class="dir">pages/</span>            <span class="note"># One file per route</span>
+│       │   ├── DashboardPage.jsx
+│       │   ├── DirectoryPage.jsx
+│       │   ├── FolderPage.jsx
+│       │   ├── UserManagementPage.jsx
+│       │   ├── AccessRequestsPage.jsx
+│       │   ├── ActivityLogPage.jsx
+│       │   ├── MyActivityPage.jsx
+│       │   ├── MyRequestsPage.jsx
+│       │   ├── ProfilePage.jsx
+│       │   └── LoginPage.jsx
+│       ├── <span class="dir">components/</span>
+│       │   ├── <span class="dir">layout/</span>       <span class="note"># TopBar, Sidebar, NotificationBell</span>
+│       │   ├── <span class="dir">ui/</span>           <span class="note"># Modal, Toast, TablePrimitives</span>
+│       │   ├── <span class="dir">directory/</span>    <span class="note"># FolderCard, DocumentTable, modals</span>
+│       │   ├── <span class="dir">users/</span>        <span class="note"># UserTable, PermissionsMatrix</span>
+│       │   └── <span class="dir">activity/</span>     <span class="note"># LogTable</span>
+│       ├── <span class="dir">hooks/</span>            <span class="note"># useAuth</span>
+│       └── <span class="dir">api/</span>              <span class="note"># Axios instance</span>
+│
+└── <span class="dir">server/</span>                   <span class="note"># Express backend</span>
+    ├── <span class="dir">src/</span>
+    │   ├── <span class="dir">routes/</span>           <span class="note"># 20 route files</span>
+    │   ├── <span class="dir">controllers/</span>      <span class="note"># Business logic per resource</span>
+    │   ├── <span class="dir">middleware/</span>       <span class="note"># authenticate, requireRole</span>
+    │   ├── <span class="dir">utils/</span>            <span class="note"># asyncHandler, helpers</span>
+    │   └── <span class="dir">config/</span>           <span class="note"># Prisma client instance</span>
+    └── <span class="dir">prisma/</span>
+        ├── schema.prisma         <span class="note"># 13 database models</span>
+        └── seed.js               <span class="note"># Demo data</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div>ORAD — Operations Restricted Access Directory</div>
+    <div>Prepared by <strong>Silverrock Tech</strong> · June 2026</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer metallic ring -->
+  <circle cx="40" cy="40" r="38" fill="url(#outerGrad)" />
+  <circle cx="40" cy="40" r="34" fill="url(#innerRing)" />
+  <!-- Blue band -->
+  <rect x="2" y="28" width="76" height="24" fill="url(#bandGrad)" />
+  <!-- Clip band to circle -->
+  <clipPath id="circleClip">
+    <circle cx="40" cy="40" r="34" />
+  </clipPath>
+  <rect x="2" y="28" width="76" height="24" fill="url(#bandGrad)" clip-path="url(#circleClip)" />
+  <!-- Inner circle edge over band -->
+  <circle cx="40" cy="40" r="34" fill="none" stroke="url(#rimGrad)" stroke-width="2" />
+  <!-- GhIPSS text -->
+  <text x="40" y="45" font-family="Arial Black, Arial, sans-serif" font-size="15" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">GhIPSS</text>
+  <defs>
+    <radialGradient id="outerGrad" cx="40%" cy="35%" r="60%" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D0D0D0" />
+      <stop offset="60%" stop-color="#8A8A8A" />
+      <stop offset="100%" stop-color="#5A5A5A" />
+    </radialGradient>
+    <radialGradient id="innerRing" cx="40%" cy="35%" r="60%" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E8E8E8" />
+      <stop offset="50%" stop-color="#B0B0B0" />
+      <stop offset="100%" stop-color="#707070" />
+    </radialGradient>
+    <linearGradient id="bandGrad" x1="0" y1="28" x2="0" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2A5C96" />
+      <stop offset="50%" stop-color="#1A3E6E" />
+      <stop offset="100%" stop-color="#0F2744" />
+    </linearGradient>
+    <linearGradient id="rimGrad" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#E0E0E0" />
+      <stop offset="50%" stop-color="#909090" />
+      <stop offset="100%" stop-color="#C0C0C0" />
+    </linearGradient>
+  </defs>
+</svg>
