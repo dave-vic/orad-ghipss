@@ -83,13 +83,10 @@ export default function LoginPage() {
         {/* Brand block */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <img
-            src="/ghipss-logo.svg"
-            alt="GhIPSS"
-            style={{ width: '72px', height: '72px', display: 'block', margin: '0 auto 18px', filter: 'drop-shadow(0 4px 16px rgba(48,97,150,0.5))' }}
+            src="/orad-logo.svg"
+            alt="ORAD"
+            style={{ width: '180px', height: 'auto', display: 'block', margin: '0 auto 18px', filter: 'drop-shadow(0 4px 16px rgba(48,97,150,0.5))' }}
           />
-          <div style={{ fontSize: '32px', fontWeight: '900', color: '#FFFFFF', letterSpacing: '-1.2px', lineHeight: 1.05, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-            ORAD Portal
-          </div>
         </div>
 
         {/* Form card */}
