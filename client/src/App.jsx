@@ -4,6 +4,7 @@ import { SidebarProvider, useSidebar } from './context/SidebarContext.jsx';
 import { useAuth } from './hooks/useAuth.js';
 import useIsMobile from './hooks/useIsMobile.js';
 import Sidebar from './components/layout/Sidebar.jsx';
+import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import DirectoryPage from './pages/DirectoryPage.jsx';
@@ -29,10 +30,11 @@ function ProtectedRoute({ children, requiredRole }) {
 
 function AppLayout({ children }) {
   const isMobile = useIsMobile();
-  const { sidebarOpen, setSidebarOpen } = useSidebar();
+  const { sidebarOpen, setSidebarOpen, collapsed, setCollapsed } = useSidebar();
+  const sidebarWidth = collapsed ? 56 : 220;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F7F8FA' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F7F8FA', position: 'relative' }}>
       {isMobile && sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
@@ -44,6 +46,31 @@ function AppLayout({ children }) {
         />
       )}
       <Sidebar isMobile={isMobile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Collapse toggle — floats on the border line, outside the clipped sidebar */}
+      {!isMobile && (
+        <button
+          onClick={() => setCollapsed(v => !v)}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          style={{
+            position: 'fixed',
+            top: '52px',
+            left: `${sidebarWidth - 13}px`,
+            zIndex: 50,
+            width: '26px', height: '26px', borderRadius: '50%',
+            backgroundColor: '#FFFFFF',
+            border: '1px solid #D1D5DB',
+            boxShadow: '0 1px 6px rgba(0,0,0,0.14)',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'left 0.2s ease, background 0.15s, box-shadow 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#EEF4FF'; e.currentTarget.style.borderColor = '#306196'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(48,97,150,0.25)'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.borderColor = '#D1D5DB'; e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.14)'; }}
+        >
+          {collapsed ? <ChevronsRight size={13} color="#306196" /> : <ChevronsLeft size={13} color="#306196" />}
+        </button>
+      )}
+
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', minWidth: 0 }}>
         {children}
       </div>

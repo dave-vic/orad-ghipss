@@ -75,28 +75,6 @@ export default function Sidebar({ isMobile = false, isOpen = false, onClose = ()
         overflow: 'hidden',
       }),
     }}>
-      {/* Collapse toggle — sits on the right border line */}
-      {!isMobile && (
-        <button
-          onClick={() => setCollapsed(v => !v)}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          style={{
-            position: 'absolute', top: 'calc(65px - 13px)', right: '-13px', zIndex: 10,
-            width: '26px', height: '26px', borderRadius: '50%',
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #E5E7EB',
-            boxShadow: '0 1px 6px rgba(0,0,0,0.12)',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'background 0.15s, box-shadow 0.15s',
-            flexShrink: 0,
-          }}
-          onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#EEF4FF'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(48,97,150,0.2)'; e.currentTarget.style.borderColor = '#306196'; }}
-          onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#FFFFFF'; e.currentTarget.style.boxShadow = '0 1px 6px rgba(0,0,0,0.12)'; e.currentTarget.style.borderColor = '#E5E7EB'; }}
-        >
-          {collapsed ? <ChevronsRight size={13} color="#306196" /> : <ChevronsLeft size={13} color="#306196" />}
-        </button>
-      )}
-
       {/* Brand */}
       <div style={{ background: 'linear-gradient(135deg, #0F2744 0%, #1B3A5C 60%, #306196 100%)', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: collapsed ? 'center' : 'flex-start', borderBottom: '1px solid #1B3A5C', minHeight: '65px' }}>
         {(!collapsed || isMobile) && (
