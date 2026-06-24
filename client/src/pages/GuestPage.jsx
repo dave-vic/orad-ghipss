@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { Download, FileText, AlertCircle, ShieldCheck, Clock, CheckCircle2, EyeOff, Maximize2 } from 'lucide-react';
+import { Download, FileText, AlertCircle, ShieldCheck, Clock, CheckCircle2, EyeOff, Maximize2, Loader } from 'lucide-react';
+import mammoth from 'mammoth';
 import api from '../api/axios.js';
 
 function formatSize(bytes) {
@@ -27,10 +28,40 @@ const EXT_COLOR = {
   ZIP:  { color: '#6B7280', bg: '#F3F4F6', grad: 'linear-gradient(135deg,#F3F4F6,#D1D5DB)' },
 };
 
-// Which file types can be previewed natively in an iframe
 const NATIVE_PREVIEW = ['PDF', 'PNG', 'JPG', 'JPEG', 'GIF', 'WEBP', 'SVG'];
-// Which types work via Google Docs viewer
-const GDOCS_PREVIEW = ['DOCX', 'DOC', 'XLSX', 'XLS', 'PPTX', 'PPT'];
+const DOCX_TYPES = ['DOCX', 'DOC'];
+const UNSUPPORTED = ['XLSX', 'XLS', 'PPTX', 'PPT', 'ZIP'];
+
+function DocxViewer({ viewUrl }) {
+  const [html, setHtml] = useState('');
+  const [renderLoading, setRenderLoading] = useState(true);
+  const [renderError, setRenderError] = useState('');
+
+  useEffect(() => {
+    fetch(viewUrl)
+      .then(r => r.arrayBuffer())
+      .then(buf => mammoth.convertToHtml({ arrayBuffer: buf }))
+      .then(result => { setHtml(result.value); setRenderLoading(false); })
+      .catch(() => { setRenderError('Could not render document.'); setRenderLoading(false); });
+  }, [viewUrl]);
+
+  if (renderLoading) return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '400px', gap: '10px', color: '#6B7280' }}>
+      <Loader size={18} style={{ animation: 'spin 1s linear infinite' }} />
+      <span style={{ fontSize: '13px' }}>Loading document…</span>
+      <style>{`@keyframes spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }`}</style>
+    </div>
+  );
+  if (renderError) return (
+    <div style={{ padding: '24px', textAlign: 'center', color: '#DC2626', fontSize: '13px' }}>{renderError}</div>
+  );
+  return (
+    <div
+      style={{ padding: '32px 40px', fontFamily: 'Georgia, serif', fontSize: '14px', lineHeight: '1.8', color: '#1F2937', overflowY: 'auto', height: '100%', backgroundColor: '#FFFFFF' }}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
 
 export default function GuestPage() {
   const { token } = useParams();
@@ -63,15 +94,8 @@ export default function GuestPage() {
   const extStyle = EXT_COLOR[ext] || { color: '#6B7280', bg: '#F3F4F6', grad: 'linear-gradient(135deg,#F3F4F6,#D1D5DB)' };
 
   const canNativePreview = NATIVE_PREVIEW.includes(ext);
-  const canGDocsPreview = GDOCS_PREVIEW.includes(ext);
-  const canPreview = canNativePreview || canGDocsPreview;
-
-  const getViewerUrl = () => {
-    if (!data) return '';
-    if (canNativePreview) return data.viewUrl;
-    if (canGDocsPreview) return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(data.viewUrl)}`;
-    return '';
-  };
+  const canDocxPreview = DOCX_TYPES.includes(ext);
+  const canPreview = canNativePreview || canDocxPreview;
 
   return (
     <div style={{
@@ -180,31 +204,25 @@ export default function GuestPage() {
 
                     {/* Inline viewer */}
                     <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #E5E7EB', backgroundColor: '#F7F8FA', height: fullscreen ? '80vh' : '520px' }}>
-                      {canNativePreview ? (
-                        ext === 'PDF' ? (
-                          <iframe
-                            src={`${getViewerUrl()}#toolbar=0&navpanes=0`}
-                            style={{ width: '100%', height: '100%', border: 'none' }}
-                            title={data.name}
-                          />
-                        ) : (
-                          <img
-                            src={getViewerUrl()}
-                            alt={data.name}
-                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                          />
-                        )
-                      ) : (
+                      {canDocxPreview ? (
+                        <DocxViewer viewUrl={data.viewUrl} />
+                      ) : ext === 'PDF' ? (
                         <iframe
-                          src={getViewerUrl()}
+                          src={`${data.viewUrl}#toolbar=0&navpanes=0`}
                           style={{ width: '100%', height: '100%', border: 'none' }}
                           title={data.name}
+                        />
+                      ) : (
+                        <img
+                          src={data.viewUrl}
+                          alt={data.name}
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                         />
                       )}
                     </div>
                   </>
                 ) : (
-                  /* No preview available for this file type */
+                  /* No preview available */
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', padding: '32px 16px', backgroundColor: '#F7F8FA', border: '1px solid #E5E7EB', borderRadius: '14px', textAlign: 'center' }}>
                     <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: extStyle.grad, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <FileText size={26} color={extStyle.color} />
