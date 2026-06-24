@@ -106,7 +106,10 @@ export default function DashboardPage() {
   const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
-    api.get('/dashboard').then(res => setData(res.data)).catch(console.error).finally(() => setLoading(false));
+    api.get('/dashboard')
+      .then(res => setData(res.data))
+      .catch(() => setData({ stats: {}, recentActivity: [], topDocuments: [], staleDocuments: [], insights: [] }))
+      .finally(() => setLoading(false));
     api.get('/favourites').then(r => setFavourites(r.data)).catch(() => {});
   }, []);
 

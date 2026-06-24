@@ -8,6 +8,8 @@ export const getDashboard = asyncHandler(async (req, res) => {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
+  const safe = (p, fallback) => p.catch(() => fallback);
+
   const [
     totalDocs,
     totalUsers,
@@ -20,32 +22,32 @@ export const getDashboard = asyncHandler(async (req, res) => {
     pendingRequests,
     staleDocs,
   ] = await Promise.all([
-    prisma.document.count({ where: { deletedAt: null } }),
-    isAdmin ? prisma.user.count({ where: { active: true } }) : null,
-    prisma.folder.count(),
-    prisma.activityLog.count({ where: { action: 'download', createdAt: { gte: thirtyDaysAgo }, ...(isAdmin ? {} : { userId }) } }),
-    isAdmin ? prisma.activityLog.count({ where: { action: 'upload', createdAt: { gte: thirtyDaysAgo } } }) : null,
-    isAdmin ? prisma.activityLog.count({ where: { action: 'login', createdAt: { gte: thirtyDaysAgo } } }) : null,
-    prisma.activityLog.groupBy({
+    safe(prisma.document.count({ where: { deletedAt: null } }), 0),
+    isAdmin ? safe(prisma.user.count({ where: { active: true } }), 0) : null,
+    safe(prisma.folder.count(), 0),
+    safe(prisma.activityLog.count({ where: { action: 'download', createdAt: { gte: thirtyDaysAgo }, ...(isAdmin ? {} : { userId }) } }), 0),
+    isAdmin ? safe(prisma.activityLog.count({ where: { action: 'upload', createdAt: { gte: thirtyDaysAgo } } }), 0) : null,
+    isAdmin ? safe(prisma.activityLog.count({ where: { action: 'login', createdAt: { gte: thirtyDaysAgo } } }), 0) : null,
+    safe(prisma.activityLog.groupBy({
       by: ['targetId', 'targetName'],
       where: { action: 'download', targetType: 'document', targetId: { not: null }, createdAt: { gte: thirtyDaysAgo } },
       _count: { id: true },
       orderBy: { _count: { id: 'desc' } },
       take: 5,
-    }),
-    prisma.activityLog.findMany({
+    }), []),
+    safe(prisma.activityLog.findMany({
       where: isAdmin ? {} : { userId },
       include: { user: { select: { name: true, username: true } } },
       orderBy: { createdAt: 'desc' },
       take: 8,
-    }),
-    isAdmin ? prisma.accessRequest.count({ where: { status: 'pending' } }) : null,
-    isAdmin ? prisma.document.findMany({
+    }), []),
+    isAdmin ? safe(prisma.accessRequest.count({ where: { status: 'pending' } }), 0) : null,
+    isAdmin ? safe(prisma.document.findMany({
       where: { deletedAt: null },
       select: { id: true, name: true, folderId: true },
       orderBy: { uploadedAt: 'asc' },
       take: 100,
-    }) : null,
+    }), []) : null,
   ]);
 
   // Find stale documents (no downloads in 90 days)
@@ -70,16 +72,18 @@ export const getDashboard = asyncHandler(async (req, res) => {
   if (isAdmin && insights.length > 0) {
     const todayStart = new Date(); todayStart.setHours(0,0,0,0);
     await Promise.all(insights.map(async ({ key, msg, link }) => {
-      const existing = await prisma.notification.findFirst({
-        where: { userId: req.user.id, type: key, createdAt: { gte: todayStart } },
-      });
-      if (!existing) {
-        await prisma.notification.create({
-          data: { userId: req.user.id, type: key, title: msg, linkUrl: link },
+      try {
+        const existing = await prisma.notification.findFirst({
+          where: { userId: req.user.id, type: key, createdAt: { gte: todayStart } },
         });
-      } else if (existing.title !== msg) {
-        await prisma.notification.update({ where: { id: existing.id }, data: { title: msg, read: false } });
-      }
+        if (!existing) {
+          await prisma.notification.create({
+            data: { userId: req.user.id, type: key, title: msg, linkUrl: link },
+          });
+        } else if (existing.title !== msg) {
+          await prisma.notification.update({ where: { id: existing.id }, data: { title: msg, read: false } });
+        }
+      } catch { /* non-critical */ }
     }));
   }
 
