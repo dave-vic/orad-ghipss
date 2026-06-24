@@ -36,10 +36,11 @@ export const login = asyncHandler(async (req, res) => {
   const jti = uuidv4();
   const token = jwt.sign({ sub: user.id, role: user.role, jti }, env.JWT_SECRET, { expiresIn: '8h' });
 
+  const isProd = env.NODE_ENV === 'production';
   res.cookie('token', token, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'strict',
     maxAge: 8 * 60 * 60 * 1000,
   });
 
