@@ -75,7 +75,7 @@ export const serveGuestFile = asyncHandler(async (req, res) => {
   // Block download if viewOnly
   if (link.viewOnly && !inline) return res.status(403).json({ error: 'This link is view-only. Downloading is not permitted.' });
 
-  const filePath = path.join(__dirname, '../../../uploads', link.document.storageKey);
+  const filePath = path.join(__dirname, '../../uploads', link.document.storageKey);
   const disposition = inline ? 'inline' : 'attachment';
   res.setHeader('Content-Disposition', `${disposition}; filename="${link.document.name}"`);
   res.setHeader('Content-Type', link.document.mimeType || 'application/octet-stream');
