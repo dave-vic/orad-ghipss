@@ -6,7 +6,7 @@ const envSchema = z.object({
   CLIENT_URL: z.string().url().optional(),
   DATABASE_URL: z.string(),
   REDIS_URL: z.string().optional(),
-  JWT_SECRET: z.string().min(32),
+  JWT_SECRET: z.string().min(1),
   AWS_ACCESS_KEY_ID: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
   AWS_REGION: z.string().default('us-east-1'),
