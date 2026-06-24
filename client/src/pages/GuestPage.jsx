@@ -38,9 +38,12 @@ function DocxViewer({ viewUrl }) {
   const [renderError, setRenderError] = useState('');
 
   useEffect(() => {
-    fetch(viewUrl, { credentials: 'omit' })
+    // Use relative path to avoid protocol mismatch (http vs https)
+    let fetchUrl = viewUrl;
+    try { fetchUrl = new URL(viewUrl).pathname + new URL(viewUrl).search; } catch {}
+    fetch(fetchUrl)
       .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
         return r.arrayBuffer();
       })
       .then(buf => mammoth.convertToHtml({ arrayBuffer: buf }))
