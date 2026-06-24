@@ -38,7 +38,7 @@ function DocxViewer({ viewUrl }) {
   const [renderError, setRenderError] = useState('');
 
   useEffect(() => {
-    fetch(viewUrl, { credentials: 'include' })
+    fetch(viewUrl, { credentials: 'omit' })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.arrayBuffer();
