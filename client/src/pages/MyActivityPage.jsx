@@ -3,6 +3,7 @@ import { ShieldCheck, Clock, FileText, Calendar, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios.js';
 import TopBar from '../components/layout/TopBar.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 const TH_BASE = {
   padding: '0 18px', height: '48px', textAlign: 'left', fontSize: '12px',
@@ -68,6 +69,7 @@ function EmptyState({ message }) {
 
 export default function MyActivityPage() {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [acks, setAcks] = useState([]);
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -86,11 +88,11 @@ export default function MyActivityPage() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#F7F8FA' }}>
       <TopBar title="My Activity" icon={Activity} breadcrumb={[{ label: 'Tracking' }, { label: 'My Activity' }]} />
-      <div style={{ padding: '28px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
         {loading ? (
           <div style={{ textAlign: 'center', padding: '80px', color: '#9CA3AF', fontSize: '13px' }}>Loading…</div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '20px', alignItems: 'start' }}>
 
             {/* Recently Accessed */}
             <SectionCard title="Recently Accessed" Icon={Clock} iconColor="#306196" count={recent.length}>
@@ -98,7 +100,7 @@ export default function MyActivityPage() {
                 <EmptyState message="No recent activity yet." />
               ) : (
                 <div style={{ borderTop: '1px solid #E5E7EB', overflowX: 'auto', backgroundColor: '#FFFFFF' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: '500px' }}>
                     <colgroup>
                       <col />
                       <col style={{ width: '100px' }} />
@@ -149,7 +151,7 @@ export default function MyActivityPage() {
                 <EmptyState message="No documents acknowledged yet." />
               ) : (
                 <div style={{ borderTop: '1px solid #E5E7EB', overflowX: 'auto', backgroundColor: '#FFFFFF' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: '500px' }}>
                     <colgroup>
                       <col />
                       <col style={{ width: '120px' }} />

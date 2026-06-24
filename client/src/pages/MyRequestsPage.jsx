@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Clock, CheckCircle, XCircle, Folder, ClipboardList } from 'lucide-react';
 import api from '../api/axios.js';
 import TopBar from '../components/layout/TopBar.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 const STATUS = {
   pending:  { label: 'Pending',  color: '#D97706', bg: '#FEF3C7', border: '#FDE68A', Icon: Clock },
@@ -10,6 +11,7 @@ const STATUS = {
 };
 
 export default function MyRequestsPage() {
+  const isMobile = useIsMobile();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading]   = useState(true);
 
@@ -46,7 +48,7 @@ export default function MyRequestsPage() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#F7F8FA' }}>
       <TopBar title="My Requests" icon={ClipboardList} breadcrumb={[{ label: 'Tracking' }, { label: 'My Requests' }]} />
-      <div style={{ padding: '28px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
 
         {loading ? (
           <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
@@ -73,8 +75,8 @@ export default function MyRequestsPage() {
           </div>
 
         ) : (
-          <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', overflowX: isMobile ? 'auto' : 'visible' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: isMobile ? '600px' : undefined }}>
               <thead>
                 <tr>
                   <th style={thStyle}>Folder</th>

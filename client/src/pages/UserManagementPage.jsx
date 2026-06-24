@@ -3,6 +3,7 @@ import { Users } from 'lucide-react';
 import api from '../api/axios.js';
 import { useAuth } from '../hooks/useAuth.js';
 import TopBar from '../components/layout/TopBar.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 import UserTable from '../components/users/UserTable.jsx';
 import AddUserModal from '../components/users/AddUserModal.jsx';
 import BulkImportModal from '../components/users/BulkImportModal.jsx';
@@ -16,6 +17,7 @@ const TABS = [
 
 export default function UserManagementPage() {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [tab, setTab] = useState('users');
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,10 +40,10 @@ export default function UserManagementPage() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <TopBar title="User Management" icon={Users} />
-      <div style={{ padding: '28px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: '28px', borderBottom: '1px solid #E5E7EB', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', gap: '28px', borderBottom: '1px solid #E5E7EB', marginBottom: '24px', flexWrap: 'wrap' }}>
           {TABS.map(t => {
             const active = tab === t.key;
             return (

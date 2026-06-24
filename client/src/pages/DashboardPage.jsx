@@ -152,7 +152,7 @@ export default function DashboardPage() {
           <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: '340px', background: 'linear-gradient(90deg, transparent, rgba(96,160,220,0.08))', pointerEvents: 'none' }} />
 
-          <div style={{ position: 'relative', padding: '36px 32px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+          <div style={{ position: 'relative', padding: isMobile ? '20px 16px' : '36px 32px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
 
             {/* Top badges */}
             <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -168,9 +168,11 @@ export default function DashboardPage() {
                   <ArrowUpRight size={12} />
                 </button>
               )}
-              <span style={{ padding: '6px 13px', backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.8)', textTransform: 'capitalize', letterSpacing: '0.07em' }}>
-                {user?.role}
-              </span>
+              {!isMobile && (
+                <span style={{ padding: '6px 13px', backgroundColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontSize: '11px', fontWeight: '700', color: 'rgba(255,255,255,0.8)', textTransform: 'capitalize', letterSpacing: '0.07em' }}>
+                  {user?.role}
+                </span>
+              )}
             </div>
 
             {/* Icon */}
@@ -179,7 +181,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Greeting */}
-            <div style={{ fontSize: '28px', fontWeight: '800', color: '#FFFFFF', letterSpacing: '-0.5px', lineHeight: 1.1, marginBottom: '8px' }}>
+            <div style={{ fontSize: isMobile ? '20px' : '28px', fontWeight: '800', color: '#FFFFFF', letterSpacing: '-0.5px', lineHeight: 1.1, marginBottom: '8px' }}>
               Good {getTimeOfDay()}, {user?.name?.split(' ')[0]}!
             </div>
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', gap: '5px', justifyContent: 'center' }}>

@@ -4,6 +4,7 @@ import { Megaphone, ChevronRight, Trash2, X, MoreHorizontal, Pencil, Folder, Upl
 import api from '../api/axios.js';
 import { useAuth } from '../hooks/useAuth.js';
 import TopBar from '../components/layout/TopBar.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 import DocumentTable from '../components/directory/DocumentTable.jsx';
 import Modal from '../components/ui/Modal.jsx';
 import FolderManagementModal from '../components/directory/FolderManagementModal.jsx';
@@ -24,6 +25,7 @@ export default function FolderPage() {
   const { folderId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [documents, setDocuments] = useState([]);
   const [folder, setFolder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -175,7 +177,7 @@ export default function FolderPage() {
           </div>
         }
       />
-      <div style={{ padding: '28px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
 
         {folder?.announcement && (
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '12px 16px', backgroundColor: '#FFF3DC', border: '1px solid #E8971A', borderRadius: '8px', marginBottom: '16px', fontSize: '13px', color: '#112235' }}>

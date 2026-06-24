@@ -4,6 +4,7 @@ import api from '../api/axios.js';
 import { useAuth } from '../hooks/useAuth.js';
 import TopBar from '../components/layout/TopBar.jsx';
 import LogTable from '../components/activity/LogTable.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 function StatCard({ label, value, Icon, color, bg }) {
   return (
@@ -21,6 +22,7 @@ function StatCard({ label, value, Icon, color, bg }) {
 
 export default function ActivityLogPage() {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [logs, setLogs] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -62,8 +64,8 @@ export default function ActivityLogPage() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <TopBar title="Activity Log" icon={Activity} breadcrumb={[{ label: 'Tracking' }, { label: 'Activity Log' }]} />
-      <div style={{ padding: '28px', flex: 1 }}>
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
+        <div style={{ display: 'flex', gap: isMobile ? '10px' : '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
           <StatCard label="Downloads" value={downloads} Icon={Download} color="#306196" bg="#EEF4FF" />
           <StatCard label="Views"     value={views}     Icon={Eye}      color="#306196" bg="#EEF4FF" />
           <StatCard label="Logins"    value={logins}    Icon={LogIn}    color="#306196" bg="#EEF4FF" />

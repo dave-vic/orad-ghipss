@@ -6,6 +6,7 @@ import api from '../api/axios.js';
 import { useAuth } from '../hooks/useAuth.js';
 import TopBar from '../components/layout/TopBar.jsx';
 import TwoFactorSetup from '../components/settings/TwoFactorSetup.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 /* ─── Shared primitives ─── */
 const ROLE_META = {
@@ -391,6 +392,7 @@ function SectionSessions() {
 /* ─── Main Page ─── */
 export default function ProfilePage() {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const [activeKey, setActiveKey] = useState('profile');
   const [data, setData]           = useState(null);
   const [toast, setToast]         = useState('');
@@ -434,14 +436,14 @@ export default function ProfilePage() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0 }}>
       <TopBar title="Profile" icon={User} breadcrumb={[{ label: 'Account' }, { label: 'Profile' }]} />
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: isMobile ? 'column' : 'row', overflow: 'hidden' }}>
         {/* Left nav */}
-        <div style={{ width: '260px', flexShrink: 0, borderRight: '1px solid #E5E7EB', padding: '24px 12px', overflowY: 'auto', backgroundColor: '#FFFFFF', boxSizing: 'border-box' }}>
+        <div style={{ width: isMobile ? '100%' : '260px', flexShrink: 0, borderRight: isMobile ? 'none' : '1px solid #E5E7EB', borderBottom: isMobile ? '1px solid #E5E7EB' : 'none', padding: isMobile ? '12px 12px 0' : '24px 12px', overflowY: isMobile ? 'visible' : 'auto', overflowX: isMobile ? 'auto' : 'visible', backgroundColor: '#FFFFFF', boxSizing: 'border-box', display: isMobile ? 'flex' : 'block', flexDirection: isMobile ? 'row' : undefined, gap: isMobile ? '4px' : undefined }}>
           {LEFT_NAV.map((group, gi) => (
-            <div key={group.group} style={{ marginTop: gi === 0 ? 0 : '16px' }}>
-              <div style={{ padding: '6px 10px', fontSize: '11px', fontWeight: '600', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{group.group}</div>
+            <div key={group.group} style={{ marginTop: isMobile ? 0 : (gi === 0 ? 0 : '16px'), display: isMobile ? 'contents' : 'block' }}>
+              {!isMobile && <div style={{ padding: '6px 10px', fontSize: '11px', fontWeight: '600', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.07em' }}>{group.group}</div>}
               {group.items.map(({ key, Icon, label, isUserRow }) => (
-                <button key={key} onClick={() => setActiveKey(key)} style={navItemStyle(key)}
+                <button key={key} onClick={() => setActiveKey(key)} style={{ ...navItemStyle(key), whiteSpace: isMobile ? 'nowrap' : undefined }}
                   onMouseEnter={e => { if (activeKey !== key) e.currentTarget.style.backgroundColor = '#F7F8FA'; }}
                   onMouseLeave={e => { if (activeKey !== key) e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
@@ -457,7 +459,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Right content */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '48px 60px', maxWidth: '760px' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: isMobile ? '20px 16px' : '48px 60px', maxWidth: '760px' }}>
           {data ? rightContent() : <div style={{ fontSize: '13px', color: '#9CA3AF' }}>Loading…</div>}
         </div>
       </div>

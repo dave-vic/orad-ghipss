@@ -5,6 +5,7 @@ import api from '../api/axios.js';
 import TopBar from '../components/layout/TopBar.jsx';
 import Toast from '../components/ui/Toast.jsx';
 import { InitialsAvatar } from '../components/ui/TablePrimitives.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 const STATUS = {
   pending:  { color: '#D97706', bg: '#FEF3C7', label: 'Pending',  Icon: Clock },
@@ -193,6 +194,7 @@ function ReviewModal({ request, onClose, onReviewed }) {
 }
 
 export default function AccessRequestsPage() {
+  const isMobile = useIsMobile();
   const [requests, setRequests] = useState([]);
   const [filter, setFilter] = useState('pending');
   const [loading, setLoading] = useState(true);
@@ -219,7 +221,7 @@ export default function AccessRequestsPage() {
   return (
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <TopBar title="Access Requests" icon={ShieldCheck} breadcrumb={[{ label: 'Administration' }, { label: 'Access Requests' }]} />
-      <div style={{ padding: '28px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
 
         {/* Tab bar */}
         <div style={{ display: 'flex', gap: '2px', marginBottom: '20px', backgroundColor: '#F3F4F6', borderRadius: '8px', padding: '3px', width: 'fit-content' }}>
@@ -265,7 +267,7 @@ export default function AccessRequestsPage() {
         ) : (
           <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', overflow: 'hidden' }}>
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed', minWidth: '700px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: isMobile ? 'auto' : 'fixed', minWidth: isMobile ? '620px' : undefined }}>
               <colgroup>
                 <col style={{ width: '200px' }} />
                 <col style={{ width: '160px' }} />

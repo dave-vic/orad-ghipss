@@ -59,7 +59,7 @@ export default function TopBar({ title, subtitle, icon: PageIcon, breadcrumb, ac
       backgroundColor: '#FFFFFF',
       borderBottom: '1px solid #E5E7EB',
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '0 24px', flexShrink: 0,
+      padding: isMobile ? '0 12px' : '0 24px', flexShrink: 0,
       position: 'sticky', top: 0, zIndex: 20,
     }}>
       {/* Left: icon + title */}
@@ -160,7 +160,7 @@ export default function TopBar({ title, subtitle, icon: PageIcon, breadcrumb, ac
           {open && (
             <div style={{
               position: 'absolute', top: 'calc(100% + 8px)', right: 0,
-              width: '220px',
+              width: isMobile ? 'min(220px, calc(100vw - 24px))' : '220px',
               backgroundColor: '#FFFFFF',
               border: '1px solid #E5E7EB',
               borderRadius: '12px',

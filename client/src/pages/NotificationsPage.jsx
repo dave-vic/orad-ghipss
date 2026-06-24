@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios.js';
 import TopBar from '../components/layout/TopBar.jsx';
 import Toast from '../components/ui/Toast.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 const TYPE_STYLE = {
   access_request:          { color: '#D97706', bg: '#FEF3C7', label: 'Access Request' },
@@ -46,6 +47,7 @@ function timeAgo(date) {
 
 export default function NotificationsPage() {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
@@ -106,7 +108,7 @@ export default function NotificationsPage() {
         }
       />
 
-      <div style={{ padding: '24px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: isMobile ? '16px' : '24px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
 
         {/* Summary row */}
         {!loading && notifications.length > 0 && (
@@ -157,8 +159,8 @@ export default function NotificationsPage() {
                   key={n.id}
                   onClick={() => handleClick(n)}
                   style={{
-                    display: 'flex', alignItems: 'center', gap: '16px',
-                    padding: '16px 24px',
+                    display: 'flex', alignItems: 'center', gap: isMobile ? '10px' : '16px',
+                    padding: isMobile ? '12px 16px' : '16px 24px',
                     borderBottom: isLast ? 'none' : '1px solid #F3F4F6',
                     backgroundColor: n.read ? '#FFFFFF' : '#F5F9FF',
                     cursor: resolveUrl(n) ? 'pointer' : 'default',
@@ -168,7 +170,7 @@ export default function NotificationsPage() {
                   onMouseLeave={e => { e.currentTarget.style.backgroundColor = n.read ? '#FFFFFF' : '#F5F9FF'; }}
                 >
                   {/* Unread indicator stripe */}
-                  <div style={{ width: '3px', height: '40px', borderRadius: '2px', backgroundColor: n.read ? 'transparent' : '#306196', flexShrink: 0 }} />
+                  <div style={{ width: '3px', height: '40px', borderRadius: '2px', backgroundColor: n.read ? 'transparent' : '#306196', flexShrink: 0, display: isMobile ? 'none' : 'block' }} />
 
                   {/* Icon badge */}
                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', backgroundColor: ts.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -187,7 +189,7 @@ export default function NotificationsPage() {
                   </div>
 
                   {/* Right: timestamp + arrow */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+                  <div style={{ display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
                     <span style={{ fontSize: '11px', color: '#9CA3AF', whiteSpace: 'nowrap' }}>{timeAgo(n.createdAt)}</span>
                     {resolveUrl(n)
                       ? <ArrowRight size={14} color="#C4C9D4" />
