@@ -81,7 +81,7 @@ export default function Sidebar({ isMobile = false, isOpen = false, onClose = ()
           onClick={() => setCollapsed(v => !v)}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           style={{
-            position: 'absolute', top: '72px', right: '-13px', zIndex: 10,
+            position: 'absolute', top: 'calc(65px - 13px)', right: '-13px', zIndex: 10,
             width: '26px', height: '26px', borderRadius: '50%',
             backgroundColor: '#FFFFFF',
             border: '1px solid #E5E7EB',
