@@ -66,7 +66,7 @@ export default function GuestPage() {
 
       {/* Brand header */}
       <div style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '36px' }}>
-        <img src="/ghipss-logo.svg" alt="GhIPSS" style={{ width: '36px', height: '36px', filter: 'drop-shadow(0 2px 8px rgba(48,97,150,0.4))' }} />
+        <img src="/ghipss-icon.svg" alt="GhIPSS" style={{ width: '36px', height: '36px', filter: 'drop-shadow(0 2px 8px rgba(48,97,150,0.4))' }} />
         <div>
           <div style={{ fontSize: '16px', fontWeight: '900', color: '#FFFFFF', letterSpacing: '-0.5px', lineHeight: 1 }}>ORAD</div>
           <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', fontWeight: '500' }}>GhIPSS Operations Portal</div>
