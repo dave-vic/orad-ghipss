@@ -24,7 +24,7 @@ async function main() {
 
   await prisma.user.upsert({
     where: { username: 'admin' },
-    update: {},
+    update: { password, role: 'admin', active: true },
     create: {
       name: 'System Admin',
       email: 'admin@ghipps.com',
