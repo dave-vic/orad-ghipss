@@ -82,11 +82,13 @@ export default function LoginPage() {
 
         {/* Brand block */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <img
-            src="/orad-logo.svg"
-            alt="ORAD"
-            style={{ width: '180px', height: 'auto', display: 'block', margin: '0 auto 18px', filter: 'drop-shadow(0 4px 16px rgba(48,97,150,0.5))' }}
-          />
+          <div style={{ display: 'inline-block', padding: '18px 32px', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(48,97,150,0.25) 0%, rgba(26,58,92,0.35) 100%)', border: '1px solid rgba(111,168,214,0.2)', backdropFilter: 'blur(8px)', marginBottom: '4px' }}>
+            <img
+              src="/orad-logo.svg"
+              alt="ORAD"
+              style={{ width: '240px', height: 'auto', display: 'block', filter: 'brightness(1.15) drop-shadow(0 2px 12px rgba(111,168,214,0.6))' }}
+            />
+          </div>
         </div>
 
         {/* Form card */}
