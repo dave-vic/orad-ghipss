@@ -71,7 +71,7 @@ app.use(errorHandler);
 // Serve React frontend in production
 const clientDist = path.join(__dirname, '../../client/dist');
 app.use(express.static(clientDist));
-app.get('*', (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(clientDist, 'index.html'));
 });
 
