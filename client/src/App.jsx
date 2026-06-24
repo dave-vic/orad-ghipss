@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext.jsx';
+import { SidebarProvider, useSidebar } from './context/SidebarContext.jsx';
 import { useAuth } from './hooks/useAuth.js';
+import useIsMobile from './hooks/useIsMobile.js';
 import Sidebar from './components/layout/Sidebar.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
@@ -26,10 +28,23 @@ function ProtectedRoute({ children, requiredRole }) {
 }
 
 function AppLayout({ children }) {
+  const isMobile = useIsMobile();
+  const { sidebarOpen, setSidebarOpen } = useSidebar();
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#F7F8FA' }}>
-      <Sidebar />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+      {isMobile && sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 999,
+            backgroundColor: 'rgba(11,24,44,0.55)',
+            backdropFilter: 'blur(2px)',
+          }}
+        />
+      )}
+      <Sidebar isMobile={isMobile} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', minWidth: 0 }}>
         {children}
       </div>
     </div>
@@ -114,7 +129,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <AppRoutes />
+        <SidebarProvider>
+          <AppRoutes />
+        </SidebarProvider>
       </AuthProvider>
     </BrowserRouter>
   );

@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import { useSidebar } from '../../context/SidebarContext.jsx';
+import useIsMobile from '../../hooks/useIsMobile.js';
 import SearchBar from '../ui/SearchBar.jsx';
 import NotificationBell from './NotificationBell.jsx';
-import { User, LogOut, ChevronDown, ChevronRight } from 'lucide-react';
+import { User, LogOut, ChevronDown, ChevronRight, Menu } from 'lucide-react';
 
 const ROLE_BADGE = {
   admin:  { color: '#DC2626', bg: '#FEE2E2', border: '#FECACA',  avatarBg: '#306196'  },
@@ -16,6 +18,8 @@ export default function TopBar({ title, subtitle, icon: PageIcon, breadcrumb, ac
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const isMobile = useIsMobile();
+  const { setSidebarOpen } = useSidebar();
 
   const initials = user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   const role = ROLE_BADGE[user?.role] || { color: '#6B7280', bg: '#F3F4F6', border: '#E5E7EB', avatarBg: '#6B7280' };
@@ -60,6 +64,21 @@ export default function TopBar({ title, subtitle, icon: PageIcon, breadcrumb, ac
     }}>
       {/* Left: icon + title */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {isMobile && (
+          <button
+            onClick={() => setSidebarOpen(v => !v)}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: '36px', height: '36px', borderRadius: '8px',
+              background: 'none', border: '1px solid #E5E7EB',
+              cursor: 'pointer', flexShrink: 0, color: '#374151',
+            }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = '#F7F8FA'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+          >
+            <Menu size={18} color="#374151" />
+          </button>
+        )}
         {PageIcon && (
           <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#EEF4FF', border: '1px solid #D6E8FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <PageIcon size={17} color="#306196" />
@@ -97,7 +116,7 @@ export default function TopBar({ title, subtitle, icon: PageIcon, breadcrumb, ac
       {/* Right */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {actions}
-        <SearchBar />
+        {!isMobile && <SearchBar />}
         <NotificationBell />
         <div style={{ width: '1px', height: '22px', backgroundColor: '#E5E7EB', margin: '0 2px' }} />
 
@@ -127,10 +146,12 @@ export default function TopBar({ title, subtitle, icon: PageIcon, breadcrumb, ac
               {initials}
             </div>
 
-            {/* Name only */}
-            <span style={{ fontSize: '13px', fontWeight: '600', color: '#112235', whiteSpace: 'nowrap', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {user?.name}
-            </span>
+            {/* Name only — hidden on mobile */}
+            {!isMobile && (
+              <span style={{ fontSize: '13px', fontWeight: '600', color: '#112235', whiteSpace: 'nowrap', maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {user?.name}
+              </span>
+            )}
 
             <ChevronDown size={12} color="#9CA3AF" style={{ transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s', flexShrink: 0 }} />
           </button>

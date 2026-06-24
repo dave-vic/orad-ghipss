@@ -5,6 +5,7 @@ import { Plus, FileText, BookOpen, ShieldAlert, Folder, Lock, Filter, Search, X,
 import api from '../api/axios.js';
 import { useAuth } from '../hooks/useAuth.js';
 import TopBar from '../components/layout/TopBar.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 import FolderManagementModal from '../components/directory/FolderManagementModal.jsx';
 import AccessRequestModal from '../components/directory/AccessRequestModal.jsx';
 import Toast from '../components/ui/Toast.jsx';
@@ -53,6 +54,7 @@ export default function DirectoryPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const isAdmin = user?.role === 'admin';
+  const isMobile = useIsMobile();
 
   const [folders, setFolders] = useState([]);
   const [recentDocs, setRecentDocs] = useState([]);
@@ -265,7 +267,7 @@ export default function DirectoryPage() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
       <TopBar title="Documents" icon={Folder} breadcrumb={[{ label: 'Workspace' }, { label: 'Documents' }]} />
 
-      <div style={{ padding: '28px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '28px', flex: 1 }}>
 
         {/* ── ZONE 1: Folder Cards Strip ── */}
         <div style={{ marginBottom: '32px' }}>
@@ -288,9 +290,14 @@ export default function DirectoryPage() {
             const hiddenCount = allFolders.length - FOLDERS_VISIBLE;
             return (
               <>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '14px' }}>
+                <div style={isMobile ? {
+                  display: 'flex', gap: '12px',
+                  overflowX: 'auto', paddingBottom: '8px',
+                } : { display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '14px' }}>
                   {visibleFolders.map(f => (
-                    <FolderCardStrip key={f.id} folder={f} locked={f.locked} />
+                    <div key={f.id} style={isMobile ? { flexShrink: 0, width: '150px' } : {}}>
+                      <FolderCardStrip folder={f} locked={f.locked} />
+                    </div>
                   ))}
                   {/* Admin: + New Folder card */}
                   {isAdmin && (showAllFolders || allFolders.length < FOLDERS_VISIBLE) && (
@@ -346,7 +353,8 @@ export default function DirectoryPage() {
           </div>
 
           {/* Table */}
-          <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '10px', overflow: 'hidden' }}>
+          <div style={{ overflowX: 'auto', borderRadius: '10px', border: '1px solid #E5E7EB' }}>
+          <div style={{ backgroundColor: '#FFFFFF', minWidth: '540px', borderRadius: '10px', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ backgroundColor: '#F7F8FA', borderBottom: '1px solid #E5E7EB' }}>
@@ -380,6 +388,7 @@ export default function DirectoryPage() {
                 })}
               </tbody>
             </table>
+          </div>
           </div>
         </div>
 
@@ -442,7 +451,7 @@ export default function DirectoryPage() {
               {docSearch ? 'No matching documents' : 'No recent documents'}
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: '8px' }}>
               {filteredDocs.map(doc => <DocCard key={doc.id} doc={doc} />)}
             </div>
           )}

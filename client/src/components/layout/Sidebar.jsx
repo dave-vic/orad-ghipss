@@ -5,7 +5,7 @@ import { LayoutDashboard, Folder, ClipboardList, Users, LogOut, Inbox, History, 
 import { useAuth } from '../../hooks/useAuth.js';
 import api from '../../api/axios.js';
 
-export default function Sidebar() {
+export default function Sidebar({ isMobile = false, isOpen = false, onClose = () => {} }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,7 +16,7 @@ export default function Sidebar() {
   const handleLogout = async () => { await logout(); navigate('/login'); };
 
   const navItem = (to, label, Icon) => (
-    <NavLink key={to} to={to} style={({ isActive }) => ({
+    <NavLink key={to} to={to} onClick={() => isMobile && onClose()} style={({ isActive }) => ({
       display: 'flex', alignItems: 'center', gap: '8px',
       padding: '7px 16px', margin: '1px 8px',
       textDecoration: 'none', borderRadius: '6px', fontSize: '13px',
@@ -47,12 +47,24 @@ export default function Sidebar() {
     return () => { clearInterval(interval); window.removeEventListener('notifications-cleared', reset); };
   }, []);
 
+  const mobileNavLink = (to) => {
+    if (isMobile) onClose();
+  };
+
   return (
     <div style={{
-      width: '220px', minHeight: '100vh', flexShrink: 0,
+      width: '220px', flexShrink: 0,
       backgroundColor: '#FFFFFF', borderRight: '1px solid #E5E7EB',
       display: 'flex', flexDirection: 'column',
-      position: 'sticky', top: 0, height: '100vh', overflowY: 'auto',
+      ...(isMobile ? {
+        position: 'fixed', top: 0, left: isOpen ? 0 : '-260px',
+        height: '100vh', zIndex: 1000,
+        transition: 'left 0.25s ease',
+        overflowY: 'auto',
+        boxShadow: isOpen ? '4px 0 24px rgba(0,0,0,0.18)' : 'none',
+      } : {
+        position: 'sticky', top: 0, height: '100vh', overflowY: 'auto',
+      }),
     }}>
       {/* Brand */}
       <div style={{ background: 'linear-gradient(135deg, #0F2744 0%, #1B3A5C 60%, #306196 100%)', padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid #1B3A5C' }}>

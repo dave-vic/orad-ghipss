@@ -8,6 +8,7 @@ import {
 import api from '../api/axios.js';
 import { useAuth } from '../hooks/useAuth.js';
 import TopBar from '../components/layout/TopBar.jsx';
+import useIsMobile from '../hooks/useIsMobile.js';
 
 const ACTION_META = {
   download:     { label: 'Download',  color: '#2563EB', bg: '#DBEAFE',  border: '#BFDBFE', Icon: Download },
@@ -99,6 +100,7 @@ function StatCard({ label, value, Icon, color, bg, sub, onClick }) {
 export default function DashboardPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [favourites, setFavourites] = useState([]);
@@ -136,7 +138,7 @@ export default function DashboardPage() {
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', backgroundColor: '#F7F8FA' }}>
       <TopBar title={`Good ${getTimeOfDay()}, ${user?.name?.split(' ')[0]}`} />
 
-      <div style={{ padding: '24px 32px 32px', flex: 1 }}>
+      <div style={{ padding: isMobile ? '16px' : '24px 32px 32px', flex: 1 }}>
 
         {/* ── Hero banner ── */}
         <div style={{ background: 'linear-gradient(135deg, #0A1F3C 0%, #0F2744 40%, #1B3A5C 75%, #245A8A 100%)', borderRadius: '20px', marginBottom: '20px', position: 'relative', overflow: 'hidden' }}>
@@ -189,7 +191,7 @@ export default function DashboardPage() {
 
         {/* ── Stat cards ── */}
         {data && (
-          <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
             <StatCard label="Total Documents" value={data.stats?.totalDocs ?? 0} Icon={FileText} color="#306196" bg="#EEF4FF" sub="across all folders" />
             {isAdmin && <StatCard label="Active Users" value={data.stats?.totalUsers ?? 0} Icon={Users} color="#306196" bg="#EEF4FF" sub="registered accounts" />}
             <StatCard label="Downloads" value={data.stats?.recentDownloads ?? 0} Icon={Download} color="#306196" bg="#EEF4FF" sub="last 30 days" />
@@ -243,7 +245,7 @@ export default function DashboardPage() {
 
         {/* ── Main content grid ── */}
         {data && (
-          <div style={{ display: 'grid', gridTemplateColumns: isAdmin ? '1fr 340px' : '1fr', gap: '20px', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isAdmin && !isMobile ? '1fr 340px' : '1fr', gap: '20px', alignItems: 'start' }}>
 
             {/* Left: Recent Activity */}
             <div style={{ backgroundColor: '#FFFFFF', borderRadius: '14px', border: '1px solid #E5E7EB', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>

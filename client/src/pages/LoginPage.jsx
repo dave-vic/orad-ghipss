@@ -78,7 +78,7 @@ export default function LoginPage() {
       <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: '900px', height: '900px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(4,12,24,0) 30%, rgba(4,12,24,0.85) 70%)', pointerEvents: 'none' }} />
 
       {/* ── Main content ── */}
-      <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '460px', padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: '460px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box' }}>
 
         {/* Brand block */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -86,7 +86,7 @@ export default function LoginPage() {
             <img
               src="/orad-logo.svg"
               alt="ORAD"
-              style={{ width: '240px', height: 'auto', display: 'block', filter: 'brightness(1.15) drop-shadow(0 2px 12px rgba(111,168,214,0.6))' }}
+              style={{ width: '100%', maxWidth: '240px', height: 'auto', display: 'block', filter: 'brightness(1.15) drop-shadow(0 2px 12px rgba(111,168,214,0.6))' }}
             />
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function LoginPage() {
           {/* Top gradient accent */}
           <div style={{ height: '3px', background: 'linear-gradient(90deg, #1A3A5C, #306196 40%, #6FA8D6 60%, #306196)' }} />
 
-          <div style={{ padding: '32px 36px 28px' }}>
+          <div style={{ padding: '24px 20px 20px' }}>
             <h1 style={{ fontSize: '19px', fontWeight: '800', color: '#112235', letterSpacing: '-0.4px', marginBottom: '4px' }}>Welcome back</h1>
             <p style={{ fontSize: '13px', color: '#9CA3AF', marginBottom: '26px' }}>Sign in to access the operations portal</p>
 
