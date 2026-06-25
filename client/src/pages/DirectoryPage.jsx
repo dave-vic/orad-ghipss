@@ -90,7 +90,7 @@ export default function DirectoryPage() {
 
   useEffect(() => { loadFolders(); }, [loadFolders]);
 
-  const allFolders = folders.map(f => ({ ...f, locked: !f.hasAccess }));
+  const allFolders = folders.map(f => ({ ...f, locked: isAdmin ? false : !f.hasAccess }));
 
   const tableFolders = tableFilter === 'accessible'
     ? allFolders.filter(f => !f.locked)
